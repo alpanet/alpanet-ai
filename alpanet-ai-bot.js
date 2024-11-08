@@ -5,6 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const FormData = require('form-data');
 const axios = require('axios');
+const schedule = require('node-schedule');
 
 // Telegram bot token'ınızı buraya yerleştirin
 const token = '6425462581:AAFfBLk5jT0wRsZAVbBJDsiAte_YYX_IQ-I';
@@ -25,12 +26,14 @@ bot.onText(/\/screenshot (.+)/, (msg, match) => {
         });
 });
 
+// Ekran görüntüsü alma fonksiyonu
 async function takeScreenshot(symbol) {
     const options = new chrome.Options();
     options.addArguments("profile-directory=Default");
     options.addArguments("--disable-dev-shm-usage");
     options.addArguments("--no-sandbox");
-    options.addArguments("headless");
+    options.addArguments("headless"); // Tarayıcıyı başlatırken görsel olarak açmıyoruz
+
     // Tarayıcıyı başlatıyoruz
     let driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
 
@@ -68,6 +71,7 @@ async function takeScreenshot(symbol) {
     }
 }
 
+// Telegram'a fotoğraf gönderme fonksiyonu
 async function sendScreenshotToTelegram(filePath, symbol) {
     const telegramUrl = 'https://api.telegram.org/bot6425462581:AAFfBLk5jT0wRsZAVbBJDsiAte_YYX_IQ-I/sendPhoto';
     const chatId = '-1002260128557';
@@ -107,3 +111,11 @@ async function sendScreenshotToTelegram(filePath, symbol) {
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+// Her gün saat 17:00'de ekran görüntüsü almak için zamanlanmış görev
+schedule.scheduleJob('0 17 * * *', function() {
+    console.log('Screenshot alma işlemi başladı.');
+    takeScreenshot('BTCUSDT')
+        .then(() => console.log('Screenshot alma işlemi tamamlandı.'))
+        .catch(error => console.error('Bir hata oluştu:', error));
+});

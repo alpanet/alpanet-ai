@@ -17,7 +17,7 @@ async function takeScreenshot() {
   options.addArguments("profile-directory=Default");
   options.addArguments("--disable-dev-shm-usage");
   options.addArguments("--no-sandbox");
-
+  options.addArguments("headless");
   // Tarayıcıyı başlatıyoruz
   let driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build();
   
@@ -82,7 +82,7 @@ async function sendScreenshotToTelegram(filePath) {
   }
 }
 
-schedule.scheduleJob('*/10 * * * * *', function() {
+schedule.scheduleJob('0 17 * * *', function() {
   console.log('Screenshot alma işlemi başladı.');
   takeScreenshot()
     .then(() => console.log('Screenshot alma işlemi tamamlandı.'))
