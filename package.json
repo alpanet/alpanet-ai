@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Alpaslan Investment AI app",
   "main": "takeScreenshot.spec.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js",
     "job": "node job-trigger.js",
