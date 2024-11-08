@@ -4,7 +4,7 @@
   "description": "Alpaslan Investment AI app",
   "main": "takeScreenshot.spec.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node alpanet-ai-bot.js",
     "job": "node job-trigger.js",
     "dev": "npm-run-all --parallel start job"
   },
